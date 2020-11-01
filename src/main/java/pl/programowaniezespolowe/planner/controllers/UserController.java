@@ -15,17 +15,21 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    @CrossOrigin
     @GetMapping(path = "/user")
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
+
+    @CrossOrigin
     @GetMapping(path = "/user/{id}")
     public Optional<User> getUser(@PathVariable String id) {
         int userId = Integer.parseInt(id);
         return userRepository.findById(userId);
     }
 
+    @CrossOrigin
     @PostMapping("/user")
     public List<User> createUser(@RequestBody Map<String, String> body) {
         String name = body.get("name");
@@ -38,6 +42,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @CrossOrigin
     @DeleteMapping("user/{id}")
     public List<User> deleteUser(@PathVariable String id) {
         int userId = Integer.parseInt(id);
