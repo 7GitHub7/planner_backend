@@ -1,4 +1,4 @@
-package pl.programowaniezespolowe.planner.objects;
+package pl.programowaniezespolowe.planner.user;
 
 import javax.persistence.*;
 

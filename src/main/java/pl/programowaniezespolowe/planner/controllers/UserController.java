@@ -1,9 +1,9 @@
-package pl.programowaniezespolowe.planner.events;
+package pl.programowaniezespolowe.planner.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.programowaniezespolowe.planner.objects.User;
-import pl.programowaniezespolowe.planner.objects.UserRepository;
+import pl.programowaniezespolowe.planner.user.User;
+import pl.programowaniezespolowe.planner.user.UserRepository;
 
 import java.util.List;
 import java.util.Map;
