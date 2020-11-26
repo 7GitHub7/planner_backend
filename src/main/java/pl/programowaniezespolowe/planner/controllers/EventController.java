@@ -10,10 +10,7 @@ import pl.programowaniezespolowe.planner.user.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class EventController {
@@ -56,7 +53,7 @@ public class EventController {
 //        Integer afterEnd =  Integer.valueOf(body.get("afterend"));
         Integer afterEnd =  1;
 
-        eventRepository.save(new Event(title, startDate, endDate, color, actions, draggable,beforeStart,afterEnd,userid,noteid));
+        eventRepository.save(new Event(title, startDate, endDate, color, actions, draggable,beforeStart,afterEnd,userid,noteid, new ArrayList<>()));
         return eventRepository.findAll();
     }
 

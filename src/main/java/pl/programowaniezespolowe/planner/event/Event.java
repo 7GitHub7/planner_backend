@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.programowaniezespolowe.planner.note.Note;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -49,10 +51,32 @@ public class Event {
     private Integer userID;
 
     @Column(name = "noteid")
-    private Integer noteID;
+    private Integer noteid;
+
+    @OneToMany
+    //@JsonIgnore
+    @JoinTable(
+            name="note", schema = "public",
+            joinColumns = {@JoinColumn(name = "noteid")},
+            inverseJoinColumns = {@JoinColumn(name = "id")}
+    )
+    private List<Note> note = new ArrayList<>();
 
 
-    public Event( String title, LocalDateTime start, LocalDateTime end, String color, String actions, Integer draggable, Integer beforeStart, Integer afterEnd, Integer userID, Integer noteID) {
+//    public Event( String title, LocalDateTime start, LocalDateTime end, String color, String actions, Integer draggable, Integer beforeStart, Integer afterEnd, Integer userID, Integer noteid) {
+//        this.title = title;
+//        this.start = start;
+//        this.end = end;
+//        this.color = color;
+//        this.actions = actions;
+//        this.draggable = draggable;
+//        this.beforeStart = beforeStart;
+//        this.afterEnd = afterEnd;
+//        this.userID = userID;
+//        this.noteid = noteid;
+//    }
+
+    public Event(String title, LocalDateTime start, LocalDateTime end, String color, String actions, Integer draggable, Integer beforeStart, Integer afterEnd, Integer userID, Integer noteid, List<Note> note) {
         this.title = title;
         this.start = start;
         this.end = end;
@@ -62,7 +86,7 @@ public class Event {
         this.beforeStart = beforeStart;
         this.afterEnd = afterEnd;
         this.userID = userID;
-        this.noteID = noteID;
+        this.noteid = noteid;
+        this.note = note;
     }
-
 }
