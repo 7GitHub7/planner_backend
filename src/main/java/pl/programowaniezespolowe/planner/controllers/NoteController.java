@@ -47,7 +47,8 @@ public class NoteController {
         try {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(body.get("date"));
             int userid = Integer.valueOf(body.get("userid"));
-            noteRepository.save(new Note(title, description, date, userid));
+            int eventid = Integer.valueOf(body.get("eventid"));
+            noteRepository.save(new Note(title, description, date, userid,eventid));
         } catch (ParseException e) {
             e.printStackTrace();
         }

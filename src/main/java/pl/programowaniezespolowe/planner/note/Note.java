@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.programowaniezespolowe.planner.event.Event;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Table(name = "note", schema = "public")
@@ -37,27 +34,16 @@ public class Note {
     @Column(name = "userid")
     private int userid;
 
-    @ManyToOne
-    //@JsonIgnore
-    @JoinTable(
-            name="event", schema = "public",
-            joinColumns = {@JoinColumn(name = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "noteid")}
-    )
-    private Event event;
+    @Column(name = "eventid")
+    private int eventid;
 
-    public Note(String title, String description, Date date, int userid) {
+
+    public Note(String title, String description, Date date, int userid, int eventid) {
         this.title = title;
         this.description = description;
         this.date = date;
         this.userid = userid;
+        this.eventid = eventid;
     }
 
-    public Note(String title, String description, Date date, int userid, Event event) {
-        this.title = title;
-        this.description = description;
-        this.date = date;
-        this.userid = userid;
-        this.event = event;
-    }
 }

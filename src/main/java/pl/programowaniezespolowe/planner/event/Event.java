@@ -57,24 +57,24 @@ public class Event {
     //@JsonIgnore
     @JoinTable(
             name="note", schema = "public",
-            joinColumns = {@JoinColumn(name = "noteid")},
-            inverseJoinColumns = {@JoinColumn(name = "id")}
+            joinColumns = {@JoinColumn(name = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "eventid")}
     )
     private List<Note> note = new ArrayList<>();
 
 
-//    public Event( String title, LocalDateTime start, LocalDateTime end, String color, String actions, Integer draggable, Integer beforeStart, Integer afterEnd, Integer userID, Integer noteid) {
-//        this.title = title;
-//        this.start = start;
-//        this.end = end;
-//        this.color = color;
-//        this.actions = actions;
-//        this.draggable = draggable;
-//        this.beforeStart = beforeStart;
-//        this.afterEnd = afterEnd;
-//        this.userID = userID;
-//        this.noteid = noteid;
-//    }
+    public Event( String title, LocalDateTime start, LocalDateTime end, String color, String actions, Integer draggable, Integer beforeStart, Integer afterEnd, Integer userID, Integer noteid) {
+        this.title = title;
+        this.start = start;
+        this.end = end;
+        this.color = color;
+        this.actions = actions;
+        this.draggable = draggable;
+        this.beforeStart = beforeStart;
+        this.afterEnd = afterEnd;
+        this.userID = userID;
+        this.noteid = noteid;
+    }
 
     public Event(String title, LocalDateTime start, LocalDateTime end, String color, String actions, Integer draggable, Integer beforeStart, Integer afterEnd, Integer userID, Integer noteid, List<Note> note) {
         this.title = title;
