@@ -2,11 +2,14 @@ package pl.programowaniezespolowe.planner.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.programowaniezespolowe.planner.dtos.CalendarEventDto;
+import pl.programowaniezespolowe.planner.dtos.EventDto;
 import pl.programowaniezespolowe.planner.event.Event;
 import pl.programowaniezespolowe.planner.event.EventRepository;
 import pl.programowaniezespolowe.planner.user.User;
 
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,10 +21,18 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
+
     @CrossOrigin
     @GetMapping(path = "/events")
-    public List<Event> getEvents() {
-        return eventRepository.findAll();
+    public List<EventDto> getEvents() {
+        List<Event> events = eventRepository.findAll();
+        ArrayList<EventDto> mapedEvents = new ArrayList<>();
+        for (Event event : events) {
+            if(event.getStart() != null)
+            mapedEvents.add(new EventDto(new CalendarEventDto(event.getTitle(), Instant.ofEpochMilli(event.getStart().getTime()), Instant.ofEpochMilli(event.getEnd().getTime())), event.getUserID()));
+        }
+
+        return mapedEvents;
     }
 
 
