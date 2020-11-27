@@ -23,7 +23,7 @@ public class CalendarEvent {
     @Column(name = "enddate")
     private LocalDateTime end;
 
-    // powinien zawierac primary i secondary color
+    // powinien zawierac primary i secondary color - na razie niech zostanie to ustawiane na froncie
     @Column(name = "color")
     private String[] color;
 
@@ -45,3 +45,7 @@ public class CalendarEvent {
     @Column(name = "after")
     private Integer afterEnd;
 }
+
+//back musi obsluzyc odebranie i wyslanie obiektu calendarevent w Event
+//calendar event ma byc zwracany/wysylany z:
+// id, title, start, end (end jest opcjonalne)
