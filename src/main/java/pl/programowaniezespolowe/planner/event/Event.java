@@ -52,6 +52,13 @@ public class Event {
     @Column(name = "userid")
     private Integer userID;
 
+    public Event(Integer userID, String title, Date from, Date from1) {
+        this.userID = userID;
+        this.title = title;
+        this.start = from;
+        this.end = from1;
+    }
+
 //    @OneToMany
 //    //@JsonIgnore
 //    @JoinTable(

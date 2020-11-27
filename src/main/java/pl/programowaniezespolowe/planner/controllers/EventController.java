@@ -1,6 +1,8 @@
 package pl.programowaniezespolowe.planner.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.programowaniezespolowe.planner.dtos.CalendarEventDto;
 import pl.programowaniezespolowe.planner.dtos.EventDto;
@@ -45,27 +47,12 @@ public class EventController {
 
     @CrossOrigin
     @PostMapping("/event")
-    public List<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<?> createEvent(@RequestBody EventDto event) {
         System.out.println(event);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.US);
-//        LocalDateTime startDate = LocalDateTime.parse(body.get("start"), formatter);
-//        LocalDateTime endDate = LocalDateTime.parse(body.get("end"), formatter);
-//        Integer noteid =  Integer.valueOf(body.get("noteid"));
-//        Integer userid =  Integer.valueOf(body.get("userid"));
-//        String title = body.get("title");
-////        LocalDate startDate =  LocalDate.parse(body.get("start"));
-////        LocalDate endDate = LocalDate.parse(body.get("end"));
-//        String color = body.get("color");
-//        String actions = body.get("actions");
-////        Integer draggable = Integer.valueOf(body.get("draggable"));
-//        Integer draggable = 1;
-////        Integer beforeStart =  Integer.valueOf(body.get("beforestart"));
-//        Integer beforeStart =  1;
-////        Integer afterEnd =  Integer.valueOf(body.get("afterend"));
-//        Integer afterEnd =  1;
 
-        eventRepository.save(event);
-        return eventRepository.findAll();
+        eventRepository.save(new Event(event.getUserID(), event.getCalendarEvent().getTitle(), Date.from(event.getCalendarEvent().getStart()), Date.from(event.getCalendarEvent().getEnd())));
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin
