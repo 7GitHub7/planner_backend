@@ -39,20 +39,21 @@ public class NoteController {
 
     @CrossOrigin
     @PostMapping("/note")
-    public List<Note> createNote(@RequestBody Map<String, String> body) {
-        String name = body.get("name");
-        String title = body.get("title");
-        String description =  body.get("description");
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(body.get("date"));
-            int userid = Integer.valueOf(body.get("userid"));
-            int eventid = Integer.valueOf(body.get("eventid"));
-            noteRepository.save(new Note(title, description, date, userid,eventid));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+    public List<Note> createNote(@RequestBody Note note) {
+//        String name = body.get("name");
+//        String title = body.get("title");
+//        String description =  body.get("description");
+//        Date date = null;
+//        try {
+//            date = new SimpleDateFormat("yyyy-MM-dd").parse(body.get("date"));
+//            int userid = Integer.valueOf(body.get("userid"));
+//            int eventid = Integer.valueOf(body.get("eventid"));
+//            noteRepository.save(new Note(title, description, date, userid,eventid));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println(note);
+        noteRepository.save(note);
         return noteRepository.findAll();
     }
 
