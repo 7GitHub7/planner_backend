@@ -19,7 +19,7 @@ public class EventController {
     EventRepository eventRepository;
 
     @CrossOrigin
-    @GetMapping(path = "/event")
+    @GetMapping(path = "/events")
     public List<Event> getEvents() {
         return eventRepository.findAll();
     }
@@ -34,26 +34,26 @@ public class EventController {
 
     @CrossOrigin
     @PostMapping("/event")
-    public List<Event> createEvent(@RequestBody Map<String, String> body) {
-        System.out.println(body);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.US);
-        LocalDateTime startDate = LocalDateTime.parse(body.get("start"), formatter);
-        LocalDateTime endDate = LocalDateTime.parse(body.get("end"), formatter);
-        Integer noteid =  Integer.valueOf(body.get("noteid"));
-        Integer userid =  Integer.valueOf(body.get("userid"));
-        String title = body.get("title");
-//        LocalDate startDate =  LocalDate.parse(body.get("start"));
-//        LocalDate endDate = LocalDate.parse(body.get("end"));
-        String color = body.get("color");
-        String actions = body.get("actions");
-//        Integer draggable = Integer.valueOf(body.get("draggable"));
-        Integer draggable = 1;
-//        Integer beforeStart =  Integer.valueOf(body.get("beforestart"));
-        Integer beforeStart =  1;
-//        Integer afterEnd =  Integer.valueOf(body.get("afterend"));
-        Integer afterEnd =  1;
+    public List<Event> createEvent(@RequestBody Event event) {
+        System.out.println(event);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.US);
+//        LocalDateTime startDate = LocalDateTime.parse(body.get("start"), formatter);
+//        LocalDateTime endDate = LocalDateTime.parse(body.get("end"), formatter);
+//        Integer noteid =  Integer.valueOf(body.get("noteid"));
+//        Integer userid =  Integer.valueOf(body.get("userid"));
+//        String title = body.get("title");
+////        LocalDate startDate =  LocalDate.parse(body.get("start"));
+////        LocalDate endDate = LocalDate.parse(body.get("end"));
+//        String color = body.get("color");
+//        String actions = body.get("actions");
+////        Integer draggable = Integer.valueOf(body.get("draggable"));
+//        Integer draggable = 1;
+////        Integer beforeStart =  Integer.valueOf(body.get("beforestart"));
+//        Integer beforeStart =  1;
+////        Integer afterEnd =  Integer.valueOf(body.get("afterend"));
+//        Integer afterEnd =  1;
 
-        eventRepository.save(new Event(title, startDate, endDate, color, actions, draggable,beforeStart,afterEnd,userid,noteid, new ArrayList<>()));
+        eventRepository.save(event);
         return eventRepository.findAll();
     }
 
