@@ -47,7 +47,7 @@ public class EventController {
     }
 
     @CrossOrigin
-    @PutMapping("/event/{id}")
+    @PutMapping("/event")
     public List<EventDto> updateEvent(@RequestBody EventDto event) {
         System.out.println(event);
 
