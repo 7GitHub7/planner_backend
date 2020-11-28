@@ -36,14 +36,10 @@ public class NoteController {
     @CrossOrigin
     @PostMapping("/note/{eventid}")
     public List<Note> createNote(@RequestBody Note note, @PathVariable String eventid) {
-//        int eventID = Integer.valueOf(body.get("eventId"));
-//        String title = body.get("title");
-//        String description =  body.get("description");
         Date dt = Calendar.getInstance().getTime();
         note.setDate(dt);
         note.setUserid(3);
         note.setEventid(Integer.valueOf(eventid));
-//        Note note = new Note(title, description, dt, 1, eventID);
         noteRepository.save(note);
         return getNotesByEvent(eventid);
     }
@@ -52,8 +48,17 @@ public class NoteController {
     @DeleteMapping("note/{id}")
     public List<Note> deleteUser(@PathVariable String id) {
         int noteId = Integer.parseInt(id);
+        int eventid = 0;
+        
+        List<Note> notes = noteRepository.findAll();
+        for(Note n : notes) {
+            if(n.getId() == Integer.valueOf(id)) {
+                eventid = n.getEventid();
+            }
+        }
+
         noteRepository.deleteById(noteId);
-        return getNotesByEvent(id);
+        return getNotesByEvent(String.valueOf(eventid));
     }
 
     public List<Note> getNotesByEvent(String eventid) {
