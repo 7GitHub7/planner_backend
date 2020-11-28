@@ -46,7 +46,7 @@ public class NoteController {
 
     @CrossOrigin
     @DeleteMapping("note/{id}")
-    public List<Note> deleteUser(@PathVariable String id) {
+    public List<Note> deleteNote(@PathVariable String id) {
         int noteId = Integer.parseInt(id);
         int eventid = 0;
         
