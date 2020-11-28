@@ -61,6 +61,7 @@ public class EventController {
                 e.setStart(Date.from(event.getCalendarEvent().getStart()));
                 e.setEnd(Date.from(event.getCalendarEvent().getEnd()));
                 e.setUserID(event.getUserID());
+                eventRepository.save(e);
             }
         }
         return getAllEvents();
