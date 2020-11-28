@@ -13,10 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 public class NoteController {
@@ -25,36 +22,22 @@ public class NoteController {
     NoteRepository noteRepository;
 
     @CrossOrigin
-    @GetMapping(path = "/note")
+    @GetMapping(path = "/notes")
     public List<Note> getNotes() {
         return noteRepository.findAll();
     }
 
     @CrossOrigin
-    @GetMapping(path = "/note/{id}")
-    public Optional<Note> getUser(@PathVariable String id) {
-        int userId = Integer.parseInt(id);
-        return noteRepository.findById(userId);
+    @GetMapping(path = "/notes/{eventid}")
+    public List<Note> getNotesByEventId(@PathVariable String eventid) {
+        return getNotesByEvent(eventid);
     }
 
     @CrossOrigin
-    @PostMapping("/note")
+    @PostMapping("/notes/{eventid}")
     public List<Note> createNote(@RequestBody Note note) {
-//        String name = body.get("name");
-//        String title = body.get("title");
-//        String description =  body.get("description");
-//        Date date = null;
-//        try {
-//            date = new SimpleDateFormat("yyyy-MM-dd").parse(body.get("date"));
-//            int userid = Integer.valueOf(body.get("userid"));
-//            int eventid = Integer.valueOf(body.get("eventid"));
-//            noteRepository.save(new Note(title, description, date, userid,eventid));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-        System.out.println(note);
         noteRepository.save(note);
-        return noteRepository.findAll();
+        return getNotesByEvent(String.valueOf(note.getEventid()));
     }
 
     @CrossOrigin
@@ -62,7 +45,21 @@ public class NoteController {
     public List<Note> deleteUser(@PathVariable String id) {
         int noteId = Integer.parseInt(id);
         noteRepository.deleteById(noteId);
-        return noteRepository.findAll();
+        return getNotesByEvent(id);
+    }
+
+    public List<Note> getNotesByEvent(String eventid) {
+        int eventId = Integer.parseInt(eventid);
+        List<Note> notes =  noteRepository.findAll();
+
+        List<Note> notesEventId = new ArrayList<Note>();
+
+        for(Note n : notes) {
+            if(n.getEventid() == eventId) {
+                notesEventId.add(n);
+            }
+        }
+        return notesEventId;
     }
 
 }

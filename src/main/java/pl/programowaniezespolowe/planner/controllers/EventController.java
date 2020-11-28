@@ -31,7 +31,7 @@ public class EventController {
         ArrayList<EventDto> mapedEvents = new ArrayList<>();
         for (Event event : events) {
             if(event.getStart() != null)
-            mapedEvents.add(new EventDto(new CalendarEventDto(event.getTitle(), Instant.ofEpochMilli(event.getStart().getTime()), Instant.ofEpochMilli(event.getEnd().getTime())), event.getUserID()));
+            mapedEvents.add(new EventDto(new CalendarEventDto(event.getId(), event.getTitle(), Instant.ofEpochMilli(event.getStart().getTime()), Instant.ofEpochMilli(event.getEnd().getTime())), event.getUserID()));
         }
 
         return mapedEvents;
