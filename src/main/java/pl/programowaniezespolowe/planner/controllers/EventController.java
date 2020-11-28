@@ -23,20 +23,11 @@ public class EventController {
     @Autowired
     EventRepository eventRepository;
 
-
     @CrossOrigin
     @GetMapping(path = "/events")
     public List<EventDto> getEvents() {
-        List<Event> events = eventRepository.findAll();
-        ArrayList<EventDto> mapedEvents = new ArrayList<>();
-        for (Event event : events) {
-            if(event.getStart() != null)
-            mapedEvents.add(new EventDto(new CalendarEventDto(event.getId(), event.getTitle(), Instant.ofEpochMilli(event.getStart().getTime()), Instant.ofEpochMilli(event.getEnd().getTime())), event.getUserID()));
-        }
-
-        return mapedEvents;
+        return getAllEvents();
     }
-
 
     @CrossOrigin
     @GetMapping(path = "/event/{id}")
@@ -56,11 +47,42 @@ public class EventController {
     }
 
     @CrossOrigin
+    @PutMapping("/event/{id}")
+    public List<EventDto> updateEvent(@RequestBody EventDto event) {
+        System.out.println(event);
+
+        //eventRepository.save(new Event(event.getUserID(), event.getCalendarEvent().getTitle(), Date.from(event.getCalendarEvent().getStart()), Date.from(event.getCalendarEvent().getEnd())));
+
+        List<Event> events = eventRepository.findAll();
+
+        for(Event e : events) {
+            if(e.getId() == event.getCalendarEvent().getId()) {
+                e.setTitle(event.getCalendarEvent().getTitle());
+                e.setStart(Date.from(event.getCalendarEvent().getStart()));
+                e.setEnd(Date.from(event.getCalendarEvent().getEnd()));
+                e.setUserID(event.getUserID());
+            }
+        }
+        return getAllEvents();
+    }
+
+
+    @CrossOrigin
     @DeleteMapping("event/{id}")
-    public List<Event> deleteEvent(@PathVariable String id) {
+    public List<EventDto> deleteEvent(@PathVariable String id) {
         int eventId = Integer.parseInt(id);
         eventRepository.deleteById(eventId);
-        return eventRepository.findAll();
+        return getAllEvents();
+    }
+
+    public List<EventDto> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        ArrayList<EventDto> mapedEvents = new ArrayList<>();
+        for (Event event : events) {
+            if(event.getStart() != null)
+                mapedEvents.add(new EventDto(new CalendarEventDto(event.getId(), event.getTitle(), Instant.ofEpochMilli(event.getStart().getTime()), Instant.ofEpochMilli(event.getEnd().getTime())), event.getUserID()));
+        }
+        return mapedEvents;
     }
 
 
