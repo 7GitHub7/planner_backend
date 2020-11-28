@@ -46,25 +46,25 @@ public class EventController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @CrossOrigin
-    @PutMapping("/event")
-    public List<EventDto> updateEvent(@RequestBody EventDto event) {
-        System.out.println(event);
+    @PutMapping("/event/{id}")
+    public ResponseEntity<?> updateEvent(@RequestBody EventDto event, @PathVariable Integer eventId) {
 
-        //eventRepository.save(new Event(event.getUserID(), event.getCalendarEvent().getTitle(), Date.from(event.getCalendarEvent().getStart()), Date.from(event.getCalendarEvent().getEnd())));
+        Optional<Event> updateEvent = eventRepository.findById(eventId);
 
-        List<Event> events = eventRepository.findAll();
+        if(updateEvent.isPresent()) {
 
-        for(Event e : events) {
-            if(e.getId() == event.getCalendarEvent().getId()) {
-                e.setTitle(event.getCalendarEvent().getTitle());
-                e.setStart(Date.from(event.getCalendarEvent().getStart()));
-                e.setEnd(Date.from(event.getCalendarEvent().getEnd()));
-                e.setUserID(event.getUserID());
-                eventRepository.save(e);
-            }
+            updateEvent.get().setStart(Date.from(event.getCalendarEvent().getStart()));
+            updateEvent.get().setEnd(Date.from(event.getCalendarEvent().getStart()));
+            updateEvent.get().setTitle(String.valueOf(event.getCalendarEvent().getEnd()));
+            updateEvent.get().setUserID(event.getUserID());
+            eventRepository.save(updateEvent.get());
+
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return getAllEvents();
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 
