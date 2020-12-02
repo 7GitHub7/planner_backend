@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.programowaniezespolowe.planner.event.Event;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -37,6 +38,10 @@ public class Note {
     @Column(name = "eventid")
     private int eventid;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "eventid",insertable=false, updatable=false)
+    private Event mevent;
 
     public Note(String title, String description, Date date, int userid, int eventid) {
         this.title = title;

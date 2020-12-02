@@ -8,6 +8,7 @@ import pl.programowaniezespolowe.planner.dtos.CalendarEventDto;
 import pl.programowaniezespolowe.planner.dtos.EventDto;
 import pl.programowaniezespolowe.planner.event.Event;
 import pl.programowaniezespolowe.planner.event.EventRepository;
+import pl.programowaniezespolowe.planner.note.NoteRepository;
 import pl.programowaniezespolowe.planner.user.User;
 
 
@@ -22,6 +23,7 @@ public class EventController {
 
     @Autowired
     EventRepository eventRepository;
+    NoteRepository noteRepository;
 
     @CrossOrigin
     @GetMapping(path = "/events")

@@ -9,9 +9,7 @@ import pl.programowaniezespolowe.planner.note.Note;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -33,6 +31,9 @@ public class Event {
 
     @Column(name = "enddate")
     private Date end;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mevent",cascade = CascadeType.REMOVE)
+    private List<Note> notes;
 //
 //    @Column(name = "color")
 //    private String color;
