@@ -8,6 +8,7 @@ import pl.programowaniezespolowe.planner.dtos.CalendarEventDto;
 import pl.programowaniezespolowe.planner.dtos.EventDto;
 import pl.programowaniezespolowe.planner.event.Event;
 import pl.programowaniezespolowe.planner.event.EventRepository;
+import pl.programowaniezespolowe.planner.note.Note;
 import pl.programowaniezespolowe.planner.note.NoteRepository;
 import pl.programowaniezespolowe.planner.user.User;
 
@@ -23,6 +24,8 @@ public class EventController {
 
     @Autowired
     EventRepository eventRepository;
+
+    @Autowired
     NoteRepository noteRepository;
 
     @CrossOrigin
@@ -70,6 +73,20 @@ public class EventController {
     @DeleteMapping("event/{id}")
     public List<EventDto> deleteEvent(@PathVariable String id) {
         int eventId = Integer.parseInt(id);
+
+        List<Note> notes =  noteRepository.findAll();
+        List<Note> notesEventId = new ArrayList<Note>();
+
+        for(Note n : notes) {
+            if(n.getEventid() == eventId) {
+                notesEventId.add(n);
+            }
+        }
+
+        for(Note n : notesEventId) {
+            noteRepository.delete(n);
+        }
+
         eventRepository.deleteById(eventId);
         return getAllEvents();
     }
