@@ -43,12 +43,12 @@ public class EventController {
 
     @CrossOrigin
     @PostMapping("/event")
-    public ResponseEntity<?> createEvent(@RequestBody EventDto event) {
+    public List<EventDto> createEvent(@RequestBody EventDto event) {
         System.out.println(event);
 
         eventRepository.save(new Event(event.getUserID(), event.getCalendarEvent().getTitle(), Date.from(event.getCalendarEvent().getStart()), Date.from(event.getCalendarEvent().getEnd())));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return getAllEvents();
     }
 
     @CrossOrigin
