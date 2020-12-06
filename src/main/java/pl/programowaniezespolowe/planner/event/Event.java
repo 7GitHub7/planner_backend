@@ -32,8 +32,11 @@ public class Event {
     @Column(name = "enddate")
     private Date end;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mevent",cascade = CascadeType.REMOVE)
-    private List<Note> notes;
+    //TO DO
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "mevent",cascade = CascadeType.REMOVE)
+    //private List<Note> notes;
+
+
 //
 //    @Column(name = "color")
 //    private String color;
