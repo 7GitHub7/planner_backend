@@ -2,7 +2,11 @@ package pl.programowaniezespolowe.planner.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.programowaniezespolowe.planner.dtos.EventDto;
+import pl.programowaniezespolowe.planner.event.Event;
 import pl.programowaniezespolowe.planner.event.EventRepository;
 import pl.programowaniezespolowe.planner.note.Note;
 import pl.programowaniezespolowe.planner.note.NoteRepository;
@@ -45,11 +49,29 @@ public class NoteController {
     }
 
     @CrossOrigin
+    @PutMapping("/note/{noteId}")
+    public ResponseEntity<?> updateEvent(@RequestBody Note note, @PathVariable Integer noteId) {
+        Optional<Note> updateNote = noteRepository.findById(noteId);
+        if(updateNote.isPresent()) {
+            updateNote.get().setTitle(note.getTitle());
+            updateNote.get().setDescription(note.getDescription());
+            updateNote.get().setEventid(note.getEventid());
+            updateNote.get().setUserid(note.getUserid());
+            updateNote.get().setDate(note.getDate());
+            noteRepository.save(updateNote.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @CrossOrigin
     @DeleteMapping("note/{id}")
     public List<Note> deleteNote(@PathVariable String id) {
         int noteId = Integer.parseInt(id);
         int eventid = 0;
-        
+
         List<Note> notes = noteRepository.findAll();
         for(Note n : notes) {
             if(n.getId() == Integer.valueOf(id)) {
