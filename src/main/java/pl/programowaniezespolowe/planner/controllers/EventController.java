@@ -11,6 +11,7 @@ import pl.programowaniezespolowe.planner.event.EventRepository;
 import pl.programowaniezespolowe.planner.note.Note;
 import pl.programowaniezespolowe.planner.note.NoteRepository;
 import pl.programowaniezespolowe.planner.user.User;
+import pl.programowaniezespolowe.planner.user.UserRepository;
 
 
 import java.time.Instant;
@@ -28,50 +29,113 @@ public class EventController {
     @Autowired
     NoteRepository noteRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    public boolean checkIsUserLogged(String userid) {
+        List<User> users = userRepository.findAll();
+        for(User u : users) {
+            if(u.getId().toString().equals(userid)) {
+                if (u.isLogged()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     @CrossOrigin
-    @GetMapping(path = "/events")
-    public List<EventDto> getEvents() {
-        return getAllEvents();
+    @GetMapping(path = "/{userid}/events")
+    public List<EventDto> getEvents(@PathVariable String userid) {
+
+        boolean canReturn = checkIsUserLogged(userid);
+
+        List<EventDto> userEvents = new ArrayList<>();
+        for(EventDto e : getAllEvents()) {
+            if(e.getUserID().toString().equals(userid)) {
+                userEvents.add(e);
+            }
+        }
+
+        System.out.println(canReturn);
+
+        if(canReturn) {
+            return userEvents;
+        }
+
+        return null;
     }
 
     @CrossOrigin
-    @GetMapping(path = "/event/{id}")
-    public Optional<Event> getEvent(@PathVariable String id) {
+    @GetMapping(path = "/{userid}/event/{id}")
+    public Optional<Event> getEvent(@PathVariable String userid, @PathVariable String id) {
+
+        boolean canReturn = checkIsUserLogged(userid);
+
         int eventId = Integer.parseInt(id);
-        return eventRepository.findById(eventId);
+        if(canReturn) return eventRepository.findById(eventId);
+        else return null;
     }
 
     @CrossOrigin
-    @PostMapping("/event")
-    public List<EventDto> createEvent(@RequestBody EventDto event) {
+    @PostMapping("/{userid}/event")
+    public List<EventDto> createEvent(@PathVariable String userid, @RequestBody EventDto event) {
+
+        boolean canReturn = checkIsUserLogged(userid);
+
         System.out.println(event);
 
-        eventRepository.save(new Event(event.getUserID(), event.getCalendarEvent().getTitle(), Date.from(event.getCalendarEvent().getStart()), Date.from(event.getCalendarEvent().getEnd())));
+        List<EventDto> userEvents = new ArrayList<>();
+        for(EventDto e : getAllEvents()) {
+            if(e.getUserID().toString().equals(userid)) {
+                userEvents.add(e);
+            }
+        }
 
-        return getAllEvents();
+        if(canReturn) {
+            eventRepository.save(new Event(Integer.valueOf(userid), event.getCalendarEvent().getTitle(), Date.from(event.getCalendarEvent().getStart()), Date.from(event.getCalendarEvent().getEnd())));
+            return userEvents;
+        }
+        else return null;
     }
 
     @CrossOrigin
-    @PutMapping("/event/{eventId}")
-    public ResponseEntity<?> updateEvent(@RequestBody EventDto event, @PathVariable Integer eventId) {
+    @PutMapping("/{userid}/event/{eventId}")
+    public ResponseEntity<?> updateEvent(@PathVariable String userid, @RequestBody EventDto event, @PathVariable Integer eventId) {
+
+        boolean canReturn = checkIsUserLogged(userid);
+
         Optional<Event> updateEvent = eventRepository.findById(eventId);
         if(updateEvent.isPresent()) {
             updateEvent.get().setStart(Date.from(event.getCalendarEvent().getStart()));
             updateEvent.get().setEnd(Date.from(event.getCalendarEvent().getEnd()));
             updateEvent.get().setTitle(String.valueOf(event.getCalendarEvent().getTitle()));
-            updateEvent.get().setUserID(event.getUserID());
+            updateEvent.get().setUserID(Integer.valueOf(userid));
             eventRepository.save(updateEvent.get());
-            return new ResponseEntity<>(HttpStatus.OK);
+            if(canReturn) return new ResponseEntity<>(HttpStatus.OK);
+            else return null;
         }
         else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if(canReturn) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            else return null;
         }
     }
 
 
     @CrossOrigin
-    @DeleteMapping("event/{id}")
-    public List<EventDto> deleteEvent(@PathVariable String id) {
+    @DeleteMapping("/{userid}/event/{id}")
+    public List<EventDto> deleteEvent(@PathVariable String userid, @PathVariable String id) {
+
+        boolean canReturn = checkIsUserLogged(userid);
+
+        List<EventDto> userEvents = new ArrayList<>();
+        for(EventDto e : getAllEvents()) {
+            if(e.getUserID().toString().equals(userid)) {
+                userEvents.add(e);
+            }
+        }
+
         int eventId = Integer.parseInt(id);
 
         List<Note> notes =  noteRepository.findAll();
@@ -84,11 +148,12 @@ public class EventController {
         }
 
         for(Note n : notesEventId) {
-            noteRepository.delete(n);
+            if(canReturn) noteRepository.delete(n);
         }
 
         eventRepository.deleteById(eventId);
-        return getAllEvents();
+        if(canReturn) return userEvents;
+        else return null;
     }
 
     public List<EventDto> getAllEvents() {

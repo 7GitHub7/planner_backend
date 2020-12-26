@@ -38,11 +38,11 @@ public class NoteController {
     }
 
     @CrossOrigin
-    @PostMapping("/note/{eventid}")
-    public List<Note> createNote(@RequestBody Note note, @PathVariable String eventid) {
+    @PostMapping(path = "/{userid}/note/{eventid}")
+    public List<Note> createNote(@PathVariable String userid, @RequestBody Note note, @PathVariable String eventid) {
         Date dt = Calendar.getInstance().getTime();
         note.setDate(dt);
-        note.setUserid(3);
+        note.setUserid(Integer.valueOf(userid));
         note.setEventid(Integer.valueOf(eventid));
         noteRepository.save(note);
         return getNotesByEvent(eventid);

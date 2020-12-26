@@ -37,15 +37,19 @@ public class User {
     @Column(name = "permission")
     private String permission;
 
+    @Column(name = "logged")
+    private boolean logged;
 
 
-    public User(String name, String surname, int groupid, String email, String password, String permission) {
+
+    public User(String name, String surname, int groupid, String email, String password, String permission, boolean logged) {
         this.name = name;
         this.surname = surname;
         this.groupid = groupid;
         this.email = email;
         this.password = password;
         this.permission = permission;
+        this.logged = logged;
     }
 
 
