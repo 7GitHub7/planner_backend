@@ -1,6 +1,8 @@
 package pl.programowaniezespolowe.planner.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.programowaniezespolowe.planner.dtos.EventDto;
 import pl.programowaniezespolowe.planner.user.User;
@@ -9,6 +11,7 @@ import pl.programowaniezespolowe.planner.user.UserRepository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 public class UserController {
@@ -32,16 +35,24 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/register")
-    public List<User> createUser(@RequestBody Map<String, String> body) {
+    public ResponseEntity<?>  createUser(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        List<User> users = userRepository.findAll();
+
+        for(User u : users) {
+            if(u.getEmail().equals(email)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
         String name = body.get("name");
         String surname = body.get("surname");
         int groupid =  Integer.valueOf(body.get("groupid"));
-        String email = body.get("email");
         String password = body.get("password");
         String permission = body.get("permission");
         boolean logged = false;
+
         userRepository.save(new User(name, surname, groupid, email, password, permission, logged));
-        return userRepository.findAll();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @CrossOrigin
