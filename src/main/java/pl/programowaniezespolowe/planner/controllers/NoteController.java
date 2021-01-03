@@ -32,9 +32,9 @@ public class NoteController {
     }
 
     @CrossOrigin
-    @GetMapping(path = "/notes/{eventid}")
-    public List<Note> getNotesByEventId(@PathVariable String eventid) {
-        return getNotesByEvent(eventid);
+    @GetMapping(path = "/{userid}/notes/{eventid}")
+    public List<Note> getNotesByEventId(@PathVariable String eventid, @PathVariable String userid) {
+        return getNotesByEvent(eventid,userid);
     }
 
     @CrossOrigin
@@ -45,12 +45,12 @@ public class NoteController {
         note.setUserid(Integer.valueOf(userid));
         note.setEventid(Integer.valueOf(eventid));
         noteRepository.save(note);
-        return getNotesByEvent(eventid);
+        return getNotesByEvent(eventid,userid);
     }
 
     @CrossOrigin
-    @PutMapping("/note/{noteId}")
-    public ResponseEntity<?> updateEvent(@RequestBody Note note, @PathVariable Integer noteId) {
+    @PutMapping("/{userid}/note/{noteId}")
+    public ResponseEntity<?> updateEvent(@RequestBody Note note, @PathVariable Integer noteId, @PathVariable String userid) {
         Optional<Note> updateNote = noteRepository.findById(noteId);
         if(updateNote.isPresent()) {
             updateNote.get().setTitle(note.getTitle());
@@ -67,8 +67,8 @@ public class NoteController {
     }
 
     @CrossOrigin
-    @DeleteMapping("note/{id}")
-    public List<Note> deleteNote(@PathVariable String id) {
+    @DeleteMapping("/{userid}/note/{id}")
+    public List<Note> deleteNote(@PathVariable String id,@PathVariable String userid) {
         int noteId = Integer.parseInt(id);
         int eventid = 0;
 
@@ -78,19 +78,18 @@ public class NoteController {
                 eventid = n.getEventid();
             }
         }
-
         noteRepository.deleteById(noteId);
-        return getNotesByEvent(String.valueOf(eventid));
+        return getNotesByEvent(String.valueOf(eventid),userid);
     }
 
-    public List<Note> getNotesByEvent(String eventid) {
+    public List<Note> getNotesByEvent(String eventid, String userid) {
         int eventId = Integer.parseInt(eventid);
         List<Note> notes =  noteRepository.findAll();
 
         List<Note> notesEventId = new ArrayList<Note>();
 
         for(Note n : notes) {
-            if(n.getEventid() == eventId) {
+            if(n.getEventid() == eventId && n.getUserid() == Integer.valueOf(userid)) {
                 notesEventId.add(n);
             }
         }
