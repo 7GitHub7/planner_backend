@@ -1,20 +1,25 @@
 package pl.programowaniezespolowe.planner.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
-import pl.programowaniezespolowe.planner.dtos.EventDto;
-import pl.programowaniezespolowe.planner.user.User;
-import pl.programowaniezespolowe.planner.user.UserRepository;
+import pl.programowaniezespolowe.planner.service.NotificationService;
+import pl.programowaniezespolowe.planner.user.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 public class UserController {
+
+    @Autowired
+    NotificationService notificationService;
+
 
     @Autowired
     UserRepository userRepository;
@@ -52,6 +57,17 @@ public class UserController {
         boolean logged = false;
 
         userRepository.save(new User(name, surname, groupid, email, password, permission, logged));
+
+        MailUser mailUser = new MailUser();
+        mailUser.setName(name);
+        mailUser.setEmailAddress(email);
+        try{
+            notificationService.sendNotification(mailUser);
+
+        }catch(MailException e){
+            System.out.println("test");
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
