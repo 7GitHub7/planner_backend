@@ -38,17 +38,22 @@ public class Note {
     @Column(name = "eventid")
     private int eventid;
 
+    @Column(name = "done")
+    private Boolean done;
+
     //TO DO
     //@ManyToOne(fetch = FetchType.LAZY)
     //@JoinColumn(name = "eventid",insertable=false, updatable=false)
     //private Event mevent;
 
-    public Note(String title, String description, Date date, int userid, int eventid) {
+    public Note(String title, String description, Date date, int userid, int eventid, Boolean done) {
         this.title = title;
         this.description = description;
         this.date = date;
         this.userid = userid;
         this.eventid = eventid;
+        this.done = done;
     }
+
 
 }
