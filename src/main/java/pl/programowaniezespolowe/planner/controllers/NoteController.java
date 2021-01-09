@@ -58,6 +58,7 @@ public class NoteController {
             updateNote.get().setEventid(note.getEventid());
             updateNote.get().setUserid(note.getUserid());
             updateNote.get().setDate(note.getDate());
+            updateNote.get().setDone(note.getDone());
             noteRepository.save(updateNote.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
